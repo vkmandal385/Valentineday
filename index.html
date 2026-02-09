@@ -212,42 +212,47 @@ button {
 </div>
 
 <!-- STORY -->
-<div class="page" id="story">
+ <div class="page" id="story">
     <div class="card">
-        <video width="100%" controls autoplay>
+
+        <video id="storyVideo" width="100%" playsinline preload="auto">
             <source src="story.mp4" type="video/mp4">
         </video>
-        <h2>Forever to Go!</h2>
+
+        <h2>Forever to Go! 💞</h2>
+
         <p class="small">
-            Jab se aap aaye ho mere life mai uss moment se…  
-            Sab kuch better ho gya hai 🌺💫  
-            You are my peace, my happiness, and my home 💖  
-            Love feels effortless and endless 💕  
+            Jab se aap aaye ho mere life mai uss moment se… <br><br>
+            Sab kuch better ho gaya hai 🌺💫 <br><br>
+            You are my peace, my happiness, and my home 💖 <br><br>
+            Love feels effortless and endless 💕 <br><br>
             Together always, heart to heart, forever 🫂✨💜
         </p>
+
         <button onclick="goToPage('page3')">Back</button>
+
     </div>
-</div>
-      
+ </div>  
+    
 <!-- VIDEOS PAGE -->       
 <div class="page" id="videos">
     <div class="card">
         <h1>My Feelings 🎞️</h1>
 
-        <video class="feelVideo" width="100%" playsinline>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
             <source src="story1.mp4" type="video/mp4">
         </video>
 
-        <video class="feelVideo" width="100%" playsinline>
-            <source src="story4.mp4" type="video/mp4">
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story2.mp4" type="video/mp4">
         </video>
 
-        <video class="feelVideo" width="100%" playsinline>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
             <source src="story3.mp4" type="video/mp4">
         </video>
 
-        <video class="feelVideo" width="100%" playsinline>
-            <source src="story2.mp4" type="video/mp4">
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story4.mp4" type="video/mp4">
         </video>
 
         <button onclick="goToPage('page3')">Back</button>
@@ -272,9 +277,11 @@ button {
 <div class="page" id="final">
 <div class="card">
 <h1>This is for you</h1>
-<video width="100%" controls autoplay>
+
+<video id="finalVideo" width="100%" playsinline preload="auto">
 <source src="final.mp4" type="video/mp4">
 </video>
+
 <button class="pink" onclick="goToPage('lastPage')">Next Surprise 🍫</button>
 </div>
 </div>
@@ -427,26 +434,73 @@ document.addEventListener("click", function(e){
     }
 });
 
-    // 🎬 Auto Play One By One With Sound
+    // 🛑 Sab videos band karne ka function
+function stopAllVideos() {
+    const videos = document.querySelectorAll("video");
+    videos.forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+    });
+}
+
+// 🎞️ My Feelings chain system
 const feelVideos = document.querySelectorAll(".feelVideo");
 
 feelVideos.forEach((video, index) => {
     video.addEventListener("ended", function () {
         if (feelVideos[index + 1]) {
-            feelVideos[index + 1].play();
+            feelVideos[index + 1].play().catch(()=>{});
         }
     });
 });
 
-// Page open hote hi first video start
 function startFeelVideos() {
-    feelVideos.forEach(v => {
-        v.pause();
-        v.currentTime = 0;
-    });
-
-    feelVideos[0].play();
+    stopAllVideos();
+    if (feelVideos.length > 0) {
+        feelVideos[0].play().catch(()=>{});
     }
+}
+
+// 🎥 Story auto start
+function startStoryVideo() {
+    stopAllVideos();
+    const storyVideo = document.getElementById("storyVideo");
+    if (storyVideo) {
+        storyVideo.play().catch(()=>{});
+    }
+}
+
+// 💖 Final auto start
+function startFinalVideo() {
+    stopAllVideos();
+    const finalVideo = document.getElementById("finalVideo");
+    if (finalVideo) {
+        finalVideo.play().catch(()=>{});
+    }
+}
+
+// 🚀 Page Switch (IMPORTANT — purana replace karo)
+function goToPage(id) {
+
+    stopAllVideos();
+
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    window.scrollTo(0,0);
+
+    if (id === "videos") {
+        startFeelVideos();
+    }
+
+    if (id === "story") {
+        startStoryVideo();
+    }
+
+    if (id === "final") {
+        startFinalVideo();
+    }
+}
 
 </script>
 
