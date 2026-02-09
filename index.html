@@ -230,25 +230,26 @@ button {
 </div>
 
 <!-- VIDEOS -->       
+<!-- VIDEOS PAGE -->       
 <div class="page" id="videos">
     <div class="card">
         <h1>My Feelings 🎞️</h1>
-        
-        <video class="feelVideo" width="100%" muted playsinline>
-    <source src="story1.mp4" type="video/mp4">
-</video>
 
-<video class="feelVideo" width="100%" muted playsinline>
-    <source src="story2.mp4" type="video/mp4">
-</video>
+        <video class="feelVideo" width="100%" playsinline>
+            <source src="story1.mp4" type="video/mp4">
+        </video>
 
-<video class="feelVideo" width="100%" muted playsinline>
-    <source src="story3.mp4" type="video/mp4">
-</video>
+        <video class="feelVideo" width="100%" playsinline>
+            <source src="story2.mp4" type="video/mp4">
+        </video>
 
-<video class="feelVideo" width="100%" muted playsinline>
-    <source src="story4.mp4" type="video/mp4">
-</video>
+        <video class="feelVideo" width="100%" playsinline>
+            <source src="story3.mp4" type="video/mp4">
+        </video>
+
+        <video class="feelVideo" width="100%" playsinline>
+            <source src="story4.mp4" type="video/mp4">
+        </video>
 
         <button onclick="goToPage('page3')">Back</button>
     </div>
@@ -304,17 +305,20 @@ button {
 
 <script>
     
-   function goToPage(id) {
+function goToPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 
     if (id === "videos") {
-        const videos = document.querySelectorAll(".feelVideo");
-        videos[0].currentTime = 0;
-        videos[0].play();
+        const feelVideos = document.querySelectorAll(".feelVideo");
+        feelVideos.forEach(v => {
+            v.pause();
+            v.currentTime = 0;
+        });
+        feelVideos[0].play();
     }
-    } 
-
+}
+    
 let taps = 0;
 function growYes() {
     taps++;
@@ -410,18 +414,28 @@ document.addEventListener("click", function(e){
         }
     }
 });
-    
-   // 🎬 Auto Next Video System
-const videos = document.querySelectorAll(".feelVideo");
 
-videos.forEach((video, index) => {
+    // 🎬 Auto Play One By One With Sound
+const feelVideos = document.querySelectorAll(".feelVideo");
+
+feelVideos.forEach((video, index) => {
     video.addEventListener("ended", function () {
-        if (videos[index + 1]) {
-            videos[index + 1].play();
+        if (feelVideos[index + 1]) {
+            feelVideos[index + 1].play();
         }
     });
-}); 
-    
+});
+
+// Page open hote hi first video start
+function startFeelVideos() {
+    feelVideos.forEach(v => {
+        v.pause();
+        v.currentTime = 0;
+    });
+
+    feelVideos[0].play();
+    }
+
 </script>
 
 </body>
