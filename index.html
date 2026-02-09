@@ -116,12 +116,25 @@ button {
     transition: 0.5s;
 }
 </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 </head>
 
 <body>
+    
+<div id="introScreen" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+z-index:9999;
+"></div>
 
 <!-- PAGE 1 -->
-<div class="page active" id="page1">
+<div class="page" id="page1">
     <div class="card">
         <img src="image1.jpg">
         <h1>Will you be mine?</h1>
@@ -502,6 +515,47 @@ function goToPage(id) {
     }
 }
 
+    // 🌌 3D INTRO EFFECT
+
+const intro = document.getElementById("introScreen");
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+);
+
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+intro.appendChild(renderer.domElement);
+
+const geometry = new THREE.TorusKnotGeometry(100, 30, 100, 16);
+const material = new THREE.MeshBasicMaterial({ 
+    color: 0xff4d79, 
+    wireframe: true 
+});
+const knot = new THREE.Mesh(geometry, material);
+
+scene.add(knot);
+camera.position.z = 400;
+
+function animateIntro() {
+    requestAnimationFrame(animateIntro);
+    knot.rotation.x += 0.01;
+    knot.rotation.y += 0.01;
+    renderer.render(scene, camera);
+}
+
+animateIntro();
+
+// ⏳ 4 sec baad first page show
+setTimeout(() => {
+    intro.style.display = "none";
+    goToPage("page1");
+}, 4000);
+    
 </script>
 
 </body>
