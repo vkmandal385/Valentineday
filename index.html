@@ -308,15 +308,28 @@ function goToPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 
+    // 🌊 Smooth scroll to top
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
     if (id === "videos") {
+
         const feelVideos = document.querySelectorAll(".feelVideo");
-        feelVideos.forEach(v => {
-            v.pause();
-            v.currentTime = 0;
+
+        // Sab videos reset karo
+        feelVideos.forEach(video => {
+            video.pause();
+            video.currentTime = 0;
         });
-        feelVideos[0].play();
+
+        // Thoda delay smooth feel ke liye
+        setTimeout(() => {
+            feelVideos[0].play();
+        }, 300);
     }
-}
+    }   
     
 let taps = 0;
 function growYes() {
