@@ -303,33 +303,33 @@ button {
 </div>
 
 <script>
-    
-function goToPage(id) {
+
+    function goToPage(id) {
+
+    // 🔴 Pehle sab videos stop karo
+    const allVideos = document.querySelectorAll("video");
+    allVideos.forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+    });
+
+    // 🔄 Page change
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 
-    // 🌊 Smooth scroll to top
+    // 🌊 Smooth scroll top
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 
+    // 🎬 Agar videos page hai toh start karo
     if (id === "videos") {
-
-        const feelVideos = document.querySelectorAll(".feelVideo");
-
-        // Sab videos reset karo
-        feelVideos.forEach(video => {
-            video.pause();
-            video.currentTime = 0;
-        });
-
-        // Thoda delay smooth feel ke liye
         setTimeout(() => {
-            feelVideos[0].play();
+            startFeelVideos();
         }, 300);
     }
-    }   
+    }
     
 let taps = 0;
 function growYes() {
