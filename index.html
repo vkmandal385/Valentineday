@@ -531,7 +531,7 @@ renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 
-document.body.appendChild(renderer.domElement);
+document.getElementById("introScreen").appendChild(renderer.domElement);
 
 // HEART SHAPE (math formula based)
 function heartShape(t) {
@@ -584,6 +584,15 @@ function animate() {
 }
 
 animate();
+    setTimeout(() => {
+
+    // Intro screen hide karo
+    document.getElementById("introScreen").style.display = "none";
+
+    // First page show karo
+    goToPage("page1");
+
+}, 4000);  // 4000 = 4 seconds
 
 // Resize fix
 window.addEventListener("resize", () => {
