@@ -592,17 +592,39 @@ const heart = new THREE.Points(geometry, material);
 scene.add(heart);
 
 // Animation (NO ROTATION)
+let introFinished = false;
+
 function animateHeart() {
 
     requestAnimationFrame(animateHeart);
 
     if (visibleCount < totalParticles) {
-        visibleCount += 40;   // speed control
+        visibleCount += 40;
         updateParticles();
     }
 
+    // ✅ Jab heart complete ho jaye
+    if (visibleCount >= totalParticles && !introFinished) {
+
+        introFinished = true;
+
+        setTimeout(() => {
+
+            const intro = document.getElementById("introScreen");
+
+            intro.style.transition = "1s";
+            intro.style.opacity = "0";
+
+            setTimeout(() => {
+                intro.style.display = "none";
+                goToPage("page1");   // First page open
+            }, 1000);
+
+        }, 1000);
+    }
+
     renderer.render(scene, camera);
-}
+    }
 
 animateHeart();
 
