@@ -515,73 +515,77 @@ function goToPage(id) {
     }
 }
 
-// Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
 
-// Camera
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
     5000
 );
-camera.position.z = 400;
 
-// Renderer
+camera.position.z = 500;
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000);
+
 document.body.appendChild(renderer.domElement);
 
-// Light
-const light = new THREE.PointLight(0xff4d6d, 2, 1000);
-light.position.set(0, 0, 500);
-scene.add(light);
+// HEART SHAPE (math formula based)
+function heartShape(t) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y =
+        13 * Math.cos(t) -
+        5 * Math.cos(2 * t) -
+        2 * Math.cos(3 * t) -
+        Math.cos(4 * t);
 
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambient);
+    return new THREE.Vector3(x * 15, y * 15, 0);
+}
 
-// ❤️ HEART SHAPE
-const heartShape = new THREE.Shape();
+const particles = 6000;
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(particles * 3);
 
-heartShape.moveTo(0, 0);
-heartShape.bezierCurveTo(0, 0, -100, -100, -200, 0);
-heartShape.bezierCurveTo(-350, 200, 0, 350, 0, 450);
-heartShape.bezierCurveTo(0, 350, 350, 200, 200, 0);
-heartShape.bezierCurveTo(100, -100, 0, 0, 0, 0);
+for (let i = 0; i < particles; i++) {
+    const t = Math.random() * Math.PI * 2;
+    const point = heartShape(t);
 
-const extrudeSettings = {
-    depth: 50,
-    bevelEnabled: true,
-    bevelSegments: 5,
-    steps: 2,
-    bevelSize: 10,
-    bevelThickness: 10
-};
+    const spread = 8;
 
-const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
-const material = new THREE.MeshPhongMaterial({
-    color: 0xff1744,
-    shininess: 100
+    positions[i * 3] = point.x + (Math.random() - 0.5) * spread;
+    positions[i * 3 + 1] = point.y + (Math.random() - 0.5) * spread;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * spread;
+}
+
+geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions, 3)
+);
+
+const material = new THREE.PointsMaterial({
+    color: 0xff4da6,
+    size: 4,
 });
 
-const heart = new THREE.Mesh(geometry, material);
-heart.rotation.x = Math.PI;
-heart.position.y = -200;
-
+const heart = new THREE.Points(geometry, material);
 scene.add(heart);
 
 // Animation
 function animate() {
     requestAnimationFrame(animate);
-    heart.rotation.y += 0.01;
+
+    heart.rotation.y += 0.002;
+    heart.rotation.x += 0.001;
+
     renderer.render(scene, camera);
 }
 
 animate();
 
-// Resize
+// Resize fix
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
