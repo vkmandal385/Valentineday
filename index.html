@@ -329,7 +329,8 @@ z-index:9999;
 </div>
 
 <script>
-
+    
+history.scrollRestoration = "manual";
     
 let taps = 0;
 function growYes() {
@@ -448,10 +449,12 @@ feelVideos.forEach((video, index) => {
             feelVideos[index + 1].play().catch(()=>{});
 
             // 👇 Smooth scroll to next video
-            feelVideos[index + 1].scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
+            setTimeout(() => {
+    feelVideos[index + 1].scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}, 200);
         }
     });
 });
@@ -486,32 +489,23 @@ function goToPage(id) {
 
     stopAllVideos();
 
-    // Hide all pages
     document.querySelectorAll('.page').forEach(p => {
         p.classList.remove('active');
+        p.scrollTop = 0;
     });
 
-    // Show selected page
     const activePage = document.getElementById(id);
     activePage.classList.add('active');
 
-    // Always open page from top
-    activePage.scrollTop = 0;
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+        activePage.scrollTop = 0;
+        window.scrollTo(0, 0);
+    }, 10);
 
-    // Video systems
-    if (id === "videos") {
-        startFeelVideos();
+    if (id === "videos") startFeelVideos();
+    if (id === "story") startStoryVideo();
+    if (id === "final") startFinalVideo();
     }
-
-    if (id === "story") {
-        startStoryVideo();
-    }
-
-    if (id === "final") {
-        startFinalVideo();
-    }
-        }
 // SCENE SETUP
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
