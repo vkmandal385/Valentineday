@@ -515,86 +515,98 @@ function goToPage(id) {
     }
 }
 
+// SCENE SETUP
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    5000
+    1000
 );
 
-camera.position.z = 500;
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000);
-
 document.getElementById("introScreen").appendChild(renderer.domElement);
 
-// HEART SHAPE (math formula based)
-function heartShape(t) {
+camera.position.z = 400;
+
+// PARTICLE HEART
+const totalParticles = 7000;
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(totalParticles * 3);
+
+let heartPoints = [];
+
+function heartFormula(t) {
     const x = 16 * Math.pow(Math.sin(t), 3);
     const y =
         13 * Math.cos(t) -
         5 * Math.cos(2 * t) -
         2 * Math.cos(3 * t) -
         Math.cos(4 * t);
-
     return new THREE.Vector3(x * 15, y * 15, 0);
 }
 
-const particles = 6000;
-const geometry = new THREE.BufferGeometry();
-const positions = new Float32Array(particles * 3);
+// Generate dense heart particles
+for (let i = 0; i < totalParticles; i++) {
 
-for (let i = 0; i < particles; i++) {
     const t = Math.random() * Math.PI * 2;
-    const point = heartShape(t);
+    const point = heartFormula(t);
 
-    const spread = 8;
+    const spread = 6;
 
-    positions[i * 3] = point.x + (Math.random() - 0.5) * spread;
-    positions[i * 3 + 1] = point.y + (Math.random() - 0.5) * spread;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * spread;
+    heartPoints.push({
+        x: point.x + (Math.random() - 0.5) * spread,
+        y: point.y + (Math.random() - 0.5) * spread,
+        z: (Math.random() - 0.5) * spread
+    });
 }
 
-geometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(positions, 3)
-);
+// Bottom to top sort
+heartPoints.sort((a, b) => a.y - b.y);
+
+let visibleCount = 0;
+
+function updateParticles() {
+
+    for (let i = 0; i < visibleCount; i++) {
+        positions[i * 3] = heartPoints[i].x;
+        positions[i * 3 + 1] = heartPoints[i].y;
+        positions[i * 3 + 2] = heartPoints[i].z;
+    }
+
+    geometry.setAttribute(
+        "position",
+        new THREE.BufferAttribute(positions, 3)
+    );
+}
 
 const material = new THREE.PointsMaterial({
     color: 0xff4da6,
-    size: 4,
+    size: 3,
+    transparent: true,
+    opacity: 0.9
 });
 
 const heart = new THREE.Points(geometry, material);
 scene.add(heart);
 
-// Animation
-function animate() {
-    requestAnimationFrame(animate);
+// Animation (NO ROTATION)
+function animateHeart() {
 
-    heart.rotation.y += 0.002;
-    heart.rotation.x += 0.001;
+    requestAnimationFrame(animateHeart);
+
+    if (visibleCount < totalParticles) {
+        visibleCount += 40;   // speed control
+        updateParticles();
+    }
 
     renderer.render(scene, camera);
 }
 
-animate();
-    setTimeout(() => {
+animateHeart();
 
-    // Intro screen hide karo
-    document.getElementById("introScreen").style.display = "none";
-
-    // First page show karo
-    goToPage("page1");
-
-}, 4000);  // 4000 = 4 seconds
-
-// Resize fix
+// Responsive
 window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
