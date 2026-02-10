@@ -547,39 +547,21 @@ function heartFormula(t) {
     return new THREE.Vector3(x * 9, y * 9, 0);
 }
 
-// Generate dense heart particles
+    // Sequential heart points for hand-drawn effect
 for (let i = 0; i < totalParticles; i++) {
-
-    const t = Math.random() * Math.PI * 2;
+    const t = (i / totalParticles) * Math.PI * 2;  // sequential t
     const point = heartFormula(t);
 
-    const spread = 6;
-
     heartPoints.push({
-        x: point.x + (Math.random() - 0.5) * spread,
-        y: point.y + (Math.random() - 0.5) * spread,
-        z: (Math.random() - 0.5) * spread
+        x: point.x,
+        y: point.y,
+        z: 0,
+        drawn: false   // ✨ hand-drawn flag
     });
 }
 
-// Bottom to top sort
+// Sort bottom to top
 heartPoints.sort((a, b) => a.y - b.y);
-
-let visibleCount = 0;
-
-function updateParticles() {
-
-    for (let i = 0; i < visibleCount; i++) {
-        positions[i * 3] = heartPoints[i].x;
-        positions[i * 3 + 1] = heartPoints[i].y;
-        positions[i * 3 + 2] = heartPoints[i].z;
-    }
-
-    geometry.setAttribute(
-        "position",
-        new THREE.BufferAttribute(positions, 3)
-    );
-}
 
 const material = new THREE.PointsMaterial({
     color: 0xff4da6,
@@ -593,26 +575,37 @@ scene.add(heart);
 heart.position.y = 0;
 
 // Animation (NO ROTATION)
+let drawIndex = 0;
 let introFinished = false;
 
 function animateHeart() {
-
     requestAnimationFrame(animateHeart);
 
-    if (visibleCount < totalParticles) {
-        visibleCount += 40;
-        updateParticles();
+    // ek frame me 5 particles appear karenge (speed adjustable)
+    for (let i = 0; i < 5; i++) {
+        if (drawIndex < heartPoints.length) {
+            heartPoints[drawIndex].drawn = true;
+            drawIndex++;
+        }
     }
 
+    // positions update
+    for (let i = 0; i < heartPoints.length; i++) {
+        const p = heartPoints[i];
+        positions[i*3] = p.x;
+        positions[i*3+1] = p.drawn ? p.y : -400; // bottom se start
+        positions[i*3+2] = p.z;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+
     // ✅ Jab heart complete ho jaye
-    if (visibleCount >= totalParticles && !introFinished) {
+    if (drawIndex >= heartPoints.length && !introFinished) {
 
         introFinished = true;
 
         setTimeout(() => {
-
             const intro = document.getElementById("introScreen");
-
             intro.style.transition = "1s";
             intro.style.opacity = "0";
 
@@ -625,8 +618,7 @@ function animateHeart() {
     }
 
     renderer.render(scene, camera);
-    }
-
+}
 animateHeart();
 
 // Responsive
