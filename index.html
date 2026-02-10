@@ -435,8 +435,17 @@ const feelVideos = document.querySelectorAll(".feelVideo");
 
 feelVideos.forEach((video, index) => {
     video.addEventListener("ended", function () {
+
         if (feelVideos[index + 1]) {
+
+            // Next video play
             feelVideos[index + 1].play().catch(()=>{});
+
+            // 👇 Smooth scroll to next video
+            feelVideos[index + 1].scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
         }
     });
 });
