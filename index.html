@@ -528,7 +528,7 @@ const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("introScreen").appendChild(renderer.domElement);
 
-camera.position.z = 400;
+camera.position.z = 500;
 
 // PARTICLE HEART
 const totalParticles = 7000;
@@ -544,7 +544,7 @@ function heartFormula(t) {
         5 * Math.cos(2 * t) -
         2 * Math.cos(3 * t) -
         Math.cos(4 * t);
-    return new THREE.Vector3(x * 15, y * 15, 0);
+    return new THREE.Vector3(x * 9, y * 9, 0);
 }
 
 // Generate dense heart particles
@@ -590,6 +590,7 @@ const material = new THREE.PointsMaterial({
 
 const heart = new THREE.Points(geometry, material);
 scene.add(heart);
+heart.position.y = 0;
 
 // Animation (NO ROTATION)
 let introFinished = false;
