@@ -13,13 +13,19 @@ body {
     color: white;
     text-align: center;
 }
+html, body {
+    height: 100%;
+    overflow: hidden;
+    }
 
 .page {
     display: none;
     padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
 }
 
-.active {
+.page.active {
     display: block;
 }
 
@@ -480,13 +486,23 @@ function goToPage(id) {
 
     stopAllVideos();
 
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+    });
 
+    // Show selected page
+    const activePage = document.getElementById(id);
+    activePage.classList.add('active');
 
+    // Always open page from top
+    activePage.scrollTop = 0;
+    window.scrollTo(0, 0);
+
+    // Video systems
     if (id === "videos") {
-    startFeelVideos();
-}
+        startFeelVideos();
+    }
 
     if (id === "story") {
         startStoryVideo();
@@ -495,8 +511,7 @@ function goToPage(id) {
     if (id === "final") {
         startFinalVideo();
     }
-}
-
+        }
 // SCENE SETUP
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
