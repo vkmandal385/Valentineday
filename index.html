@@ -581,27 +581,35 @@ let introFinished = false;
 function animateHeart() {
     requestAnimationFrame(animateHeart);
 
-    // ek frame me 5 particles appear karenge (speed adjustable)
-    for (let i = 0; i < 5; i++) {
+    // sequentially draw particles
+    for (let i = 0; i < 5; i++) { // adjust speed: jitna bada, utna fast
         if (drawIndex < heartPoints.length) {
             heartPoints[drawIndex].drawn = true;
             drawIndex++;
         }
     }
 
-    // positions update
+    // update positions
     for (let i = 0; i < heartPoints.length; i++) {
         const p = heartPoints[i];
+
+        // initialize currentY for smooth movement
+        if (p.drawn && p.currentY === undefined) p.currentY = -400;
+
+        // gradual rise to final y
+        if (p.drawn && p.currentY < p.y) {
+            p.currentY += (p.y - p.currentY) * 0.05; 
+        }
+
         positions[i*3] = p.x;
-        positions[i*3+1] = p.drawn ? p.y : -400; // bottom se start
+        positions[i*3+1] = p.drawn ? p.currentY : -400;
         positions[i*3+2] = p.z;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
 
-    // ✅ Jab heart complete ho jaye
+    // intro complete
     if (drawIndex >= heartPoints.length && !introFinished) {
-
         introFinished = true;
 
         setTimeout(() => {
@@ -611,14 +619,14 @@ function animateHeart() {
 
             setTimeout(() => {
                 intro.style.display = "none";
-                goToPage("page1");   // First page open
+                goToPage("page1");
             }, 1000);
-
         }, 1000);
     }
 
     renderer.render(scene, camera);
-}
+    }
+    
 animateHeart();
 
 // Responsive
