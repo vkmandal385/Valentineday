@@ -515,46 +515,78 @@ function goToPage(id) {
     }
 }
 
-    // 🌌 3D INTRO EFFECT
-
-const intro = document.getElementById("introScreen");
-
+// Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+// Camera
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    5000
 );
-
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-intro.appendChild(renderer.domElement);
-
-const geometry = new THREE.TorusKnotGeometry(100, 30, 100, 16);
-const material = new THREE.MeshBasicMaterial({ 
-    color: 0xff4d79, 
-    wireframe: true 
-});
-const knot = new THREE.Mesh(geometry, material);
-
-scene.add(knot);
 camera.position.z = 400;
 
-function animateIntro() {
-    requestAnimationFrame(animateIntro);
-    knot.rotation.x += 0.01;
-    knot.rotation.y += 0.01;
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Light
+const light = new THREE.PointLight(0xff4d6d, 2, 1000);
+light.position.set(0, 0, 500);
+scene.add(light);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+
+// ❤️ HEART SHAPE
+const heartShape = new THREE.Shape();
+
+heartShape.moveTo(0, 0);
+heartShape.bezierCurveTo(0, 0, -100, -100, -200, 0);
+heartShape.bezierCurveTo(-350, 200, 0, 350, 0, 450);
+heartShape.bezierCurveTo(0, 350, 350, 200, 200, 0);
+heartShape.bezierCurveTo(100, -100, 0, 0, 0, 0);
+
+const extrudeSettings = {
+    depth: 50,
+    bevelEnabled: true,
+    bevelSegments: 5,
+    steps: 2,
+    bevelSize: 10,
+    bevelThickness: 10
+};
+
+const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+const material = new THREE.MeshPhongMaterial({
+    color: 0xff1744,
+    shininess: 100
+});
+
+const heart = new THREE.Mesh(geometry, material);
+heart.rotation.x = Math.PI;
+heart.position.y = -200;
+
+scene.add(heart);
+
+// Animation
+function animate() {
+    requestAnimationFrame(animate);
+    heart.rotation.y += 0.01;
     renderer.render(scene, camera);
 }
 
-animateIntro();
+animate();
 
-// ⏳ 4 sec baad first page show
-setTimeout(() => {
-    intro.style.display = "none";
-    goToPage("page1");
-}, 4000);
+// Resize
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
     
 </script>
 
