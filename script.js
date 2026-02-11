@@ -31,7 +31,6 @@ const controlsWebGL = new THREE.OrbitControls(camera, renderer.domElement);
 /* =======================
    PARTICLE HEART
 ======================= */
-
 const tl = gsap.timeline({
   repeat: 1,           // ek baar beat karega
   yoyo: true,
@@ -85,7 +84,6 @@ scene.add(particles);
 /* =======================
    ROTATION ANIMATION
 ======================= */
-
 gsap.fromTo(
   scene.rotation,
   { y: -0.2 },
@@ -101,7 +99,6 @@ gsap.fromTo(
 /* =======================
    RENDER LOOP
 ======================= */
-
 function render() {
   requestAnimationFrame(render);
   geometry.setFromPoints(vertices);
@@ -112,7 +109,6 @@ render();
 /* =======================
    RESIZE
 ======================= */
-
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -123,18 +119,23 @@ window.addEventListener("resize", onWindowResize);
 /* =======================
    SHOW FIRST PAGE
 ======================= */
-
 function showFirstPage() {
 
-  // Fade out canvas
+  // Canvas fade out
   renderer.domElement.style.opacity = "0";
 
   setTimeout(() => {
 
     renderer.domElement.style.display = "none";
 
-    if (typeof goToPage === "function") {
-      goToPage("page1");
+    // Directly activate first page
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+    });
+
+    const page1 = document.getElementById("page1");
+    if (page1) {
+      page1.classList.add("active");
     }
 
   }, 1000);
