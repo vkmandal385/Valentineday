@@ -29,20 +29,20 @@ document.body.appendChild(renderer.domElement);
 const controlsWebGL = new THREE.OrbitControls(camera, renderer.domElement);
 
 /* =======================
-   PARTICLE HEART
+   PARTICLE HEART (OPTIMIZED)
 ======================= */
 const tl = gsap.timeline({
-  repeat: 1,           // ek baar beat karega
+  repeat: 0,           // No extra repeat → faster
   yoyo: true,
   onComplete: showFirstPage
 });
 
 const path = document.querySelector("path");
 const length = path.getTotalLength();
-
 const vertices = [];
 
-for (let i = 0; i < length; i += 0.1) {
+// Reduce number of points & delays for faster animation
+for (let i = 0; i < length; i += 0.5) {  // bigger step → fewer particles
 
   const point = path.getPointAtLength(i);
   const vector = new THREE.Vector3(point.x, -point.y, 0);
@@ -60,9 +60,9 @@ for (let i = 0; i < length; i += 0.1) {
       y: -552 / 2,
       z: 0,
       ease: "power2.inOut",
-      duration: "random(2,4)"
+      duration: "random(1,2)" // shorter duration → faster
     },
-    i * 0.002
+    i * 0.001 // smaller delay → faster overall
   );
 }
 
@@ -89,10 +89,10 @@ gsap.fromTo(
   { y: -0.2 },
   {
     y: 0.2,
-    repeat: 1,
+    repeat: 0, // single smooth rotation
     yoyo: true,
     ease: "power2.inOut",
-    duration: 3
+    duration: 2
   }
 );
 
@@ -120,23 +120,19 @@ window.addEventListener("resize", onWindowResize);
    SHOW FIRST PAGE
 ======================= */
 function showFirstPage() {
-  // Canvas fade out
   renderer.domElement.style.opacity = "0";
 
   setTimeout(() => {
     renderer.domElement.style.display = "none";
-
-    // Show first page
-    goToPage("page1");
-
-  }, 1000);
+    goToPage("page1");  // show first page immediately
+  }, 500); // fade out fast
 }
 
 /* =======================
    PAGE SWITCH FUNCTION
 ======================= */
 function goToPage(id) {
-  // Stop all videos if any
+  // Stop all videos
   const videos = document.querySelectorAll("video");
   videos.forEach(v => {
     v.pause();
@@ -207,4 +203,4 @@ function growYes() {
         yes.style.transform = "translate(-50%, -50%) scale(4)";
         document.getElementById("noBtn").style.display = "none";
     }
-     }
+}
