@@ -120,23 +120,91 @@ window.addEventListener("resize", onWindowResize);
    SHOW FIRST PAGE
 ======================= */
 function showFirstPage() {
-
   // Canvas fade out
   renderer.domElement.style.opacity = "0";
 
   setTimeout(() => {
-
     renderer.domElement.style.display = "none";
 
-    // Directly activate first page
-    document.querySelectorAll('.page').forEach(p => {
-      p.classList.remove('active');
-    });
-
-    const page1 = document.getElementById("page1");
-    if (page1) {
-      page1.classList.add("active");
-    }
+    // Show first page
+    goToPage("page1");
 
   }, 1000);
 }
+
+/* =======================
+   PAGE SWITCH FUNCTION
+======================= */
+function goToPage(id) {
+  // Stop all videos if any
+  const videos = document.querySelectorAll("video");
+  videos.forEach(v => {
+    v.pause();
+    v.currentTime = 0;
+  });
+
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+  });
+
+  // Show requested page
+  const activePage = document.getElementById(id);
+  if (activePage) {
+    activePage.classList.add('active');
+  }
+
+  // Auto-play videos if required
+  if (id === "videos") startFeelVideos();
+  if (id === "story") startStoryVideo();
+  if (id === "final") startFinalVideo();
+}
+
+/* =======================
+   VIDEO HELPERS
+======================= */
+function stopAllVideos() {
+  const videos = document.querySelectorAll("video");
+  videos.forEach(video => {
+    video.pause();
+    video.currentTime = 0;
+  });
+}
+
+function startFeelVideos() {
+  stopAllVideos();
+  const feelVideos = document.querySelectorAll(".feelVideo");
+  if (feelVideos.length > 0) {
+    feelVideos[0].play().catch(()=>{});
+  }
+}
+
+function startStoryVideo() {
+  stopAllVideos();
+  const storyVideo = document.getElementById("storyVideo");
+  if (storyVideo) storyVideo.play().catch(()=>{});
+}
+
+function startFinalVideo() {
+  stopAllVideos();
+  const finalVideo = document.getElementById("finalVideo");
+  if (finalVideo) finalVideo.play().catch(()=>{});
+}
+
+/* =======================
+   YES/NO BUTTON EFFECT
+======================= */
+let taps = 0;
+function growYes() {
+    taps++;
+    let yes = document.getElementById("yesBtn");
+    yes.style.transform = `scale(${1 + taps * 0.5})`;
+
+    if (taps >= 4) {
+        yes.style.position = "absolute";
+        yes.style.left = "50%";
+        yes.style.top = "60%";
+        yes.style.transform = "translate(-50%, -50%) scale(4)";
+        document.getElementById("noBtn").style.display = "none";
+    }
+     }
