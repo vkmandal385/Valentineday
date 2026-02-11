@@ -10,7 +10,7 @@ body {
 }
 
 /* =========================
-   CANVAS (WebGL) 
+   CANVAS (WebGL)
 ========================= */
 canvas {
     position: fixed;
@@ -18,8 +18,8 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0; /* behind pages */
-    transition: 1s; /* fade effect */
+    z-index: 0;
+    transition: 1s;
 }
 
 /* =========================
@@ -27,8 +27,8 @@ canvas {
 ========================= */
 svg {
     position: absolute;
-    width: 0;  /* keep path for JS without showing */
-    height: 0;
+    width: 0;
+    height: 0; /* hidden, just for JS path */
 }
 
 /* =========================
@@ -43,7 +43,7 @@ svg {
     min-height: 100vh;
     padding: 20px;
     overflow-y: auto;
-    z-index: 1; /* above canvas */
+    z-index: 1;
 }
 
 .page.active {
@@ -55,26 +55,11 @@ svg {
 ========================= */
 .card {
     background: linear-gradient(135deg, #5c0a1d, #2a0610);
-    padding: 30px;
+    padding: 25px;
     border-radius: 20px;
     max-width: 400px;
     margin: 40px auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     text-align: center;
-}
-
-.card img {
-    max-width: 100%;
-    border-radius: 15px;
-}
-
-h1, h2 {
-    color: #ff4d79;
-}
-
-.small {
-    font-size: 14px;
-    opacity: 0.8;
 }
 
 /* =========================
@@ -84,79 +69,24 @@ button {
     padding: 12px 25px;
     border: none;
     border-radius: 30px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     margin: 10px;
-    transition: 0.3s;
 }
 
 .green { background: #28a745; color: white; }
-.red { background: #ff3366; color: white; }
-.pink { background: #ff4d79; color: white; }
+.red   { background: #ff3366; color: white; }
+.pink  { background: #ff4d79; color: white; }
 
 /* =========================
-   BOXES (GALLERY/OPTIONS)
-========================= */
-.box-container {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.box {
-    background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 15px;
-    width: 120px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.box:hover {
-    transform: scale(1.05);
-}
-
-/* =========================
-   GALLERY
-========================= */
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    padding: 20px;
-}
-
-.polaroid {
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    color: black;
-}
-
-.polaroid img {
-    width: 100%;
-    border-radius: 5px;
-}
-
-.caption {
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* =========================
-   FLOWERS
+   FLOWERS & CHOCOLATE
 ========================= */
 .flower {
     position: fixed;
     pointer-events: none;
-    z-index: 0; /* behind everything */
+    z-index: 0;
 }
 
-/* =========================
-   CHOCOLATE IMAGE
-========================= */
 #choco {
     transition: 0.5s;
-}
+   }
