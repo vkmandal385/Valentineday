@@ -503,14 +503,10 @@ function goToPage(id) {
     const activePage = document.getElementById(id);
     activePage.classList.add('active');
 
-    // sirf active page ka scroll reset karo
-    activePage.scrollTo(0, 0);
-
     if (id === "videos") startFeelVideos();
     if (id === "story") startStoryVideo();
     if (id === "final") startFinalVideo();
-    }
-    
+}   
 // SCENE SETUP
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
