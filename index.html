@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine</title>
+  <title>SVG heart to WebGL - Animated</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="./style.css">
 
 <style>
 body {
@@ -132,16 +132,12 @@ button {
 </head>
 
 <body>
-    
-<div id="introScreen" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-z-index:9999;
-"></div>
+
+    <!-- partial:index.partial.html -->
+<svg viewBox="0 0 600 552">
+  <path d="M300,107.77C284.68,55.67,239.76,0,162.31,0,64.83,0,0,82.08,0,171.71c0,.48,0,.95,0,1.43-.52,19.5,0,217.94,299.87,379.69v0l0,0,.05,0,0,0,0,0v0C600,391.08,600.48,192.64,600,173.14c0-.48,0-.95,0-1.43C600,82.08,535.17,0,437.69,0,360.24,0,315.32,55.67,300,107.77" fill="#ee5282"/>
+</svg>
+
 
 <!-- PAGE 1 -->
 <div class="page" id="page1">
@@ -508,125 +504,11 @@ function goToPage(id) {
     if (id === "final") startFinalVideo();
 }   
 // SCENE SETUP
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
-
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById("introScreen").appendChild(renderer.domElement);
-
-camera.position.z = 500;
-
-// PARTICLE HEART
-const totalParticles = 7000;
-const geometry = new THREE.BufferGeometry();
-const positions = new Float32Array(totalParticles * 3);
-
-let heartPoints = [];
-
-function heartFormula(t) {
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y =
-        13 * Math.cos(t) -
-        5 * Math.cos(2 * t) -
-        2 * Math.cos(3 * t) -
-        Math.cos(4 * t);
-    return new THREE.Vector3(x * 9, y * 9, 0);
-}
-
-    // Sequential heart points for hand-drawn effect
-for (let i = 0; i < totalParticles; i++) {
-    const t = (i / totalParticles) * Math.PI * 2;  // sequential t
-    const point = heartFormula(t);
-
-    heartPoints.push({
-        x: point.x,
-        y: point.y,
-        z: 0,
-        drawn: false   // ✨ hand-drawn flag
-    });
-}
-
-// Sort bottom to top
-heartPoints.sort((a, b) => a.y - b.y);
-
-const material = new THREE.PointsMaterial({
-    color: 0xff4da6,
-    size: 3,
-    transparent: true,
-    opacity: 0.9
-});
-
-const heart = new THREE.Points(geometry, material);
-scene.add(heart);
-heart.position.y = 0;
-
-// Animation (NO ROTATION)
-let drawIndex = 0;
-let introFinished = false;
-
-function animateHeart() {
-    requestAnimationFrame(animateHeart);
-
-    // sequentially draw particles
-    for (let i = 0; i < 5; i++) { // adjust speed: jitna bada, utna fast
-        if (drawIndex < heartPoints.length) {
-            heartPoints[drawIndex].drawn = true;
-            drawIndex++;
-        }
-    }
-
-    // update positions
-    for (let i = 0; i < heartPoints.length; i++) {
-        const p = heartPoints[i];
-
-        // initialize currentY for smooth movement
-        if (p.drawn && p.currentY === undefined) p.currentY = -400;
-
-        // gradual rise to final y
-        if (p.drawn && p.currentY < p.y) {
-            p.currentY += (p.y - p.currentY) * 0.05; 
-        }
-
-        positions[i*3] = p.x;
-        positions[i*3+1] = p.drawn ? p.currentY : -400;
-        positions[i*3+2] = p.z;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
-
-    // intro complete
-    if (drawIndex >= heartPoints.length && !introFinished) {
-        introFinished = true;
-
-        setTimeout(() => {
-            const intro = document.getElementById("introScreen");
-            intro.style.transition = "1s";
-            intro.style.opacity = "0";
-
-            setTimeout(() => {
-                intro.style.display = "none";
-                goToPage("page1");
-            }, 1000);
-        }, 1000);
-    }
-
-    renderer.render(scene, camera);
-    }
+<!-- partial -->
+  <script src='https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/three@0.136.0/examples/js/controls/OrbitControls.js'></script>
+<script src='https://unpkg.co/gsap@3/dist/gsap.min.js'></script><script  src="./script.js"></script>
     
-animateHeart();
-
-// Responsive
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
     
 </script>
 
