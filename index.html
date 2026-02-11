@@ -503,6 +503,16 @@ function goToPage(id) {
     if (id === "story") startStoryVideo();
     if (id === "final") startFinalVideo();
 }   
+ 
+  // 💓 Animation ke baad first page open
+window.addEventListener("load", function () {
+
+    // Animation duration jitna time yaha set karo
+    setTimeout(function () {
+        goToPage("page1");
+    }, 8000);  // 5000 = 5 seconds
+
+});
 // SCENE SETUP
 <!-- partial -->
   <script src='https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.min.js'></script>
