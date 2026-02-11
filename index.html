@@ -1,584 +1,426 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Valentine</title>  <style>  
-body {  
-    margin: 0;  
-    font-family: 'Poppins', sans-serif;  
-    background: linear-gradient(135deg, #1a0000, #4d0019);  
-    color: white;  
-    text-align: center;  
-}  
-html, body {  
-    height: 100%;  
-    overflow: hidden;  
-    }  
-  
-.page {  
-    display: none;  
-    padding: 20px;  
-    height: 100vh;  
-    overflow-y: auto;  
-    position: absolute;  
-    top: 0;  
-    left: 0;  
-    width: 100%;  
-}  
-  
-.page.active {  
-    display: block;  
-}  
-  
-.card {  
-    background: linear-gradient(135deg, #5c0a1d, #2a0610);  
-    padding: 30px;  
-    border-radius: 20px;  
-    max-width: 400px;  
-    margin: 40px auto;  
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);  
-}  
-  
-img {  
-    max-width: 100%;  
-    border-radius: 15px;  
-}  
-  
-h1 {  
-    color: #ff4d79;  
-}  
-  
-.small {  
-    font-size: 14px;  
-    opacity: 0.8;  
-}  
-  
-button {  
-    padding: 12px 25px;  
-    border: none;  
-    border-radius: 30px;  
-    font-size: 18px;  
-    cursor: pointer;  
-    margin: 10px;  
-    transition: 0.3s;  
-}  
-  
-.green { background: #28a745; color: white; }  
-.red { background: #ff3366; color: white; }  
-.pink { background: #ff4d79; color: white; }  
-  
-.box-container {  
-    display: flex;  
-    gap: 15px;  
-    justify-content: center;  
-    flex-wrap: wrap;  
-    margin-top: 20px;  
-}  
-  
-.box {  
-    background: rgba(255,255,255,0.08);  
-    padding: 20px;  
-    border-radius: 15px;  
-    width: 120px;  
-    cursor: pointer;  
-    transition: 0.3s;  
-}  
-  
-.box:hover {  
-    transform: scale(1.05);  
-}  
-  
-/* Gallery style */  
-.gallery {  
-    display: grid;  
-    grid-template-columns: repeat(2, 1fr);  
-    gap: 15px;  
-    padding: 20px;  
-}  
-  
-.polaroid {  
-    background: white;  
-    padding: 10px;  
-    border-radius: 8px;  
-    color: black;  
-}  
-  
-.polaroid img {  
-    width: 100%;  
-    border-radius: 5px;  
-}  
-  
-.caption {  
-    font-size: 14px;  
-    margin-top: 5px;  
-}  
-  
-.flower {  
-    position: fixed;  
-    pointer-events: none;  
-    z-index: 0;  
-}  
-  
-#choco {  
-    transition: 0.5s;  
-}  
-</style>  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a0000, #4d0019);
+    color: white;
+    text-align: center;
+    height: 100%;
+    overflow: hidden;
+}
 
-</head>  <body>  <div id="introScreen" style="  
-position:fixed;  
-top:0;  
-left:0;  
-width:100%;  
-height:100%;  
-background:black;  
-z-index:9999;  
-"></div>  <!-- PAGE 1 -->  <div class="page" id="page1">  
-    <div class="card">  
-        <img src="image1.jpg">  
-        <h1>Will you be mine?</h1>  
-        <p class="small">  
-            Kal kya hoga kisne dekha hai<br>  
-            Aaj toh hum sath ho sakte hai  
-        </p>  <button id="yesBtn" class="green" onclick="goToPage('page2')">YES</button>  
-    <button id="noBtn" class="red" onclick="growYes()">NO</button>  
+.page {
+    display: none;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.page.active {
+    display: block;
+}
+
+.card {
+    background: linear-gradient(135deg, #5c0a1d, #2a0610);
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 400px;
+    margin: 40px auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+img {
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+h1 {
+    color: #ff4d79;
+}
+
+.small {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.3s;
+}
+
+.green { background: #28a745; color: white; }
+.red { background: #ff3366; color: white; }
+.pink { background: #ff4d79; color: white; }
+
+.box-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.box {
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
+    border-radius: 15px;
+    width: 120px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.box:hover {
+    transform: scale(1.05);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+.polaroid {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    color: black;
+}
+
+.polaroid img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.caption {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.flower {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+}
+
+#choco {
+    transition: 0.5s;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page" id="page1">
+    <div class="card">
+        <img src="image1.jpg">
+        <h1>Will you be mine?</h1>
+        <p class="small">
+            Kal kya hoga kisne dekha hai<br>
+            Aaj toh hum sath ho sakte hai
+        </p>
+        <button id="yesBtn" class="green" onclick="goToPage('page2')">YES</button>
+        <button id="noBtn" class="red" onclick="growYes()">NO</button>
+    </div>
 </div>
 
-</div>  <!-- PAGE 2 -->  <div class="page" id="page2">  
-    <div class="card">  
-        <img src="image2.jpg">  
-        <h1>Happy Valentine Day! 💍</h1>  
-        <p class="small">  
-            Aapke sath bitaya hua 1 hour v mere liye 24 hour ke barabar hai 🤗  
-        </p>  
-        <button class="pink" onclick="goToPage('page3')">SEE MY GIFTS</button>  
-    </div>  
-</div>  <!-- PAGE 3 -->  <div class="page" id="page3">  
-    <div class="card">  
-        <h1>Something for You</h1>  <div class="box-container">  
-        <div class="box" onclick="goToPage('gallery')">  
-            <h2>📸</h2>  
-            <p>Our Gallery</p>  
-            <p class="small">6 cinematic memories</p>  
-        </div>  
-
-        <div class="box" onclick="goToPage('letter')">  
-            <h2>💌</h2>  
-            <p>My Heart</p>  
-            <p class="small">A letter for you</p>  
-        </div>  
-
-        <div class="box" onclick="goToPage('story')">  
-            <h2>🎥</h2>  
-            <p>Our Story</p>  
-            <p class="small">Watch this surprise</p>  
-        </div>  
-        
-        <div class="box" onclick="goToPage('videos')">  
-            <h2>🎞️</h2>  
-            <p>My Feelings</p>  
-            <p class="small"> Video for you</p>  
-        </div>  
-
-        <div class="box" onclick="goToPage('picInMyHeart')">  
-            <h2>🔒</h2>  
-            <p>Locked</p>  
-            <p class="small"> Private </p>  
-        </div>  
-    </div>  
-
-    <button class="pink" onclick="goToPage('final')">Finally ✨</button>  
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <div class="card">
+        <img src="image2.jpg">
+        <h1>Happy Valentine Day! 💍</h1>
+        <p class="small">
+            Aapke sath bitaya hua 1 hour v mere liye 24 hour ke barabar hai 🤗
+        </p>
+        <button class="pink" onclick="goToPage('page3')">SEE MY GIFTS</button>
+    </div>
 </div>
 
-</div>  <!-- GALLERY -->  <div class="page" id="gallery">  
-    <h1>Memories</h1>  
-    <div class="gallery">  
-        <div class="polaroid"><img src="g1.jpg"></div>  
-        <div class="polaroid"><img src="g2.jpg"></div>  
-        <div class="polaroid"><img src="g3.jpg"></div>  
-        <div class="polaroid"><img src="g4.jpg"></div>  
-        <div class="polaroid"><img src="g5.jpg"></div>  
-        <div class="polaroid"><img src="g6.jpg"></div>  
-    </div>  
-    <button onclick="goToPage('page3')">Back</button>  
-</div>  <!-- LETTER -->  <div class="page" id="letter">  
-    <div class="card">  
-        <h1>My Heart to Yours</h1>  
-        <img src="letter.jpg">  
-        <button onclick="goToPage('page3')">Back</button>  
-    </div>  
-</div>  <!-- STORY -->   <div class="page" id="story">  
-    <div class="card">  <video id="storyVideo" width="100%" playsinline preload="auto">  
-        <source src="story.mp4" type="video/mp4">  
-    </video>  
-
-    <h2>Forever to Go! 💞</h2>  
-
-    <p class="small">  
-        Jab se aap aaye ho mere life mai uss moment se… <br><br>  
-        Sab kuch better ho gaya hai 🌺💫 <br><br>  
-        You are my peace, my happiness, and my home 💖 <br><br>  
-        Love feels effortless and endless 💕 <br><br>  
-        Together always, heart to heart, forever 🫂✨💜  
-    </p>  
-
-    <button onclick="goToPage('page3')">Back</button>  
-
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+    <div class="card">
+        <h1>Something for You</h1>
+        <div class="box-container">
+            <div class="box" onclick="goToPage('gallery')">
+                <h2>📸</h2>
+                <p>Our Gallery</p>
+                <p class="small">6 cinematic memories</p>
+            </div>
+            <div class="box" onclick="goToPage('letter')">
+                <h2>💌</h2>
+                <p>My Heart</p>
+                <p class="small">A letter for you</p>
+            </div>
+            <div class="box" onclick="goToPage('story')">
+                <h2>🎥</h2>
+                <p>Our Story</p>
+                <p class="small">Watch this surprise</p>
+            </div>
+            <div class="box" onclick="goToPage('videos')">
+                <h2>🎞️</h2>
+                <p>My Feelings</p>
+                <p class="small">Video for you</p>
+            </div>
+            <div class="box" onclick="goToPage('picInMyHeart')">
+                <h2>🔒</h2>
+                <p>Locked</p>
+                <p class="small">Private</p>
+            </div>
+        </div>
+        <button class="pink" onclick="goToPage('final')">Finally ✨</button>
+    </div>
 </div>
 
- </div>    <!-- VIDEOS PAGE -->         <div class="page" id="videos">  
-    <div class="card">  
-        <h1>My Feelings 🎞️</h1>  <video class="feelVideo" width="100%" playsinline preload="auto">  
-        <source src="story1.mp4" type="video/mp4">  
-    </video>  
-
-    <video class="feelVideo" width="100%" playsinline preload="auto">  
-        <source src="story4.mp4" type="video/mp4">  
-    </video>  
-
-    <video class="feelVideo" width="100%" playsinline preload="auto">  
-        <source src="story3.mp4" type="video/mp4">  
-    </video>  
-
-    <video class="feelVideo" width="100%" playsinline preload="auto">  
-        <source src="story2.mp4" type="video/mp4">  
-    </video>  
-
-    <button onclick="goToPage('page3')">Back</button>  
+<!-- GALLERY -->
+<div class="page" id="gallery">
+    <h1>Memories</h1>
+    <div class="gallery">
+        <div class="polaroid"><img src="g1.jpg"></div>
+        <div class="polaroid"><img src="g2.jpg"></div>
+        <div class="polaroid"><img src="g3.jpg"></div>
+        <div class="polaroid"><img src="g4.jpg"></div>
+        <div class="polaroid"><img src="g5.jpg"></div>
+        <div class="polaroid"><img src="g6.jpg"></div>
+    </div>
+    <button onclick="goToPage('page3')">Back</button>
 </div>
 
-</div>  <!-- PIC IN MY HEART -->  <div class="page" id="picInMyHeart">  
-    <h1>Your Pic 😘</h1>  
-    <div class="gallery">  
-        <div class="polaroid"><img src="u1.jpg"></div>  
-        <div class="polaroid"><img src="u2.jpg"></div>  
-        <div class="polaroid"><img src="u3.jpg"></div>  
-        <div class="polaroid"><img src="u4.jpg"></div>  
-        <div class="polaroid"><img src="u5.jpg"></div>  
-        <div class="polaroid"><img src="u6.jpg"></div>  
-    </div>  
-    <button onclick="goToPage('page3')">Back</button>  
-</div>     <!-- FINAL -->  <div class="page" id="final">  
-<div class="card">  
-<h1>This is for you</h1>  <video id="finalVideo" width="100%" playsinline preload="auto">  
-<source src="final.mp4" type="video/mp4">  
-</video>  <button class="pink" onclick="goToPage('lastPage')">Next Surprise 🍫</button>
-
-</div>  
-</div>  <!-- CHOCOLATE PAGE -->  <div class="page" id="lastPage">  
-    <div class="card">  
-        <h1>Touch the Chocolate 🍫</h1>  
-        <img src="chocolate.jpg" id="choco">  <div id="surpriseBox" style="margin-top:20px; display:none;">  
-        <img id="surpriseImg" src="" style="width:100%; border-radius:15px;">  
-        <p id="surpriseText" class="small"></p>  
-    </div>  
-
-    <p id="loveLine" style="  
-        margin-top:20px;  
-        font-size:18px;  
-        opacity:0;  
-        transition:1s;  
-        color:#ff4d88;  
-    ">  
-        The chocolate is finished… but my love for you never will be 💖✨  
-    </p>  
+<!-- LETTER -->
+<div class="page" id="letter">
+    <div class="card">
+        <h1>My Heart to Yours</h1>
+        <img src="letter.jpg">
+        <button onclick="goToPage('page3')">Back</button>
+    </div>
 </div>
 
-</div>  <script>  
-      
-let taps = 0;  
-function growYes() {  
-    taps++;  
-    let yes = document.getElementById("yesBtn");  
-    yes.style.transform = `scale(${1 + taps * 0.5})`;  
-  
-    if (taps >= 4) {  
-        yes.style.position = "absolute";  
-        yes.style.left = "50%";  
-        yes.style.top = "60%";  
-        yes.style.transform = "translate(-50%, -50%) scale(4)";  
-        document.getElementById("noBtn").style.display = "none";  
-    }  
-}  
-  
-// 🌸 Flower Falling  
-function createFlower() {  
-    let page1Active = document.getElementById("page1").classList.contains("active");  
-    let page2Active = document.getElementById("page2").classList.contains("active");  
-    if (!page1Active && !page2Active) return;  
-  
-    const flower = document.createElement("div");  
-    flower.className = "flower";  
-  
-    const flowers = ["🌸","🌺","🌹","🍁","🍂"];  
-    flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];  
-  
-    let x = Math.random() * window.innerWidth;  
-    let y = -50;  
-    flower.style.left = x + "px";  
-    flower.style.top = y + "px";  
-    flower.style.fontSize = (15 + Math.random() * 25) + "px";  
-  
-    document.body.appendChild(flower);  
-  
-    let speed = 1 + Math.random() * 2;  
-    let drift = (Math.random() - 0.5) * 1.5;  
-    let rotation = 0;  
-  
-    function fall() {  
-        y += speed;  
-        x += drift;  
-        rotation += 2;  
-  
-        flower.style.top = y + "px";  
-        flower.style.left = x + "px";  
-        flower.style.transform = "rotate(" + rotation + "deg)";  
-  
-        if (y < window.innerHeight + 50) {  
-            requestAnimationFrame(fall);  
-        } else {  
-            flower.remove();  
-        }  
-    }  
-  
-    fall();  
-}  
-  
-setInterval(createFlower, 150);  
-  
-// 🍫 Chocolate Bite System  
-let clickCount = 0;  
-const lines = [  
-    "Tum meri sabse meethi aadat ho 🍫❤️",  
-    "Har din tumhare saath chocolate se bhi sweet hai 😘",  
-    "Tum meri favourite craving ho 😍",  
-    "Tum meri life ki Dairy Milk ho 💖",  
-    "Forever my sweetest person 💞"  
-];  
-const images = ["c1.jpg","c2.jpg","c3.jpg","c4.jpg","c5.jpg"];  
-  
-document.addEventListener("click", function(e){  
-    if(e.target && e.target.id === "choco"){  
-        let box = document.getElementById("surpriseBox");  
-        let text = document.getElementById("surpriseText");  
-        let img = document.getElementById("surpriseImg");  
-        let choco = document.getElementById("choco");  
-  
-        box.style.display = "block";  
-        text.innerHTML = lines[clickCount % lines.length];  
-        img.src = images[clickCount % images.length];  
-  
-        let bite = 15 + (clickCount * 12);  
-        choco.style.clipPath = `circle(${100 - bite}% at top right)`;  
-        choco.style.transform = `rotate(${clickCount * 8}deg) scale(${1 - clickCount * 0.08})`;  
-  
-        clickCount++;  
-  
-        if (clickCount >= 5) {  
-            choco.style.opacity = "0.3";  
-            choco.style.pointerEvents = "none";  
-            document.getElementById("loveLine").style.opacity = "1";  
-        }  
-    }  
-});  
-  
-    // 🛑 Sab videos band karne ka function  
-function stopAllVideos() {  
-    const videos = document.querySelectorAll("video");  
-    videos.forEach(video => {  
-        video.pause();  
-        video.currentTime = 0;  
-    });  
-}  
-  
-// 🎞️ My Feelings chain system  
-const feelVideos = document.querySelectorAll(".feelVideo");  
-  
-feelVideos.forEach((video, index) => {  
-    video.addEventListener("ended", function () {  
-  
-        if (feelVideos[index + 1]) {  
-  
-            // Next video play  
-            feelVideos[index + 1].play().catch(()=>{});  
-  
-            // 👇 Smooth scroll to next video  
-            setTimeout(() => {  
-    const videosPage = document.getElementById("videos");  
-const nextVideo = feelVideos[index + 1];  
-  
-videosPage.scrollTo({  
-    top: nextVideo.getBoundingClientRect().top   
-         - videosPage.getBoundingClientRect().top   
-         + videosPage.scrollTop - 20,  
-    behavior: "smooth"  
-});  
-}, 200);  
-        }  
-    });  
-});  
-  
-function startFeelVideos() {  
-    stopAllVideos();  
-    if (feelVideos.length > 0) {  
-        feelVideos[0].play().catch(()=>{});  
-    }  
-}  
-  
-// 🎥 Story auto start  
-function startStoryVideo() {  
-    stopAllVideos();  
-    const storyVideo = document.getElementById("storyVideo");  
-    if (storyVideo) {  
-        storyVideo.play().catch(()=>{});  
-    }  
-}  
-  
-// 💖 Final auto start  
-function startFinalVideo() {  
-    stopAllVideos();  
-    const finalVideo = document.getElementById("finalVideo");  
-    if (finalVideo) {  
-        finalVideo.play().catch(()=>{});  
-    }  
-}  
-  
-// 🚀 Page Switch (IMPORTANT — purana replace karo)  
-function goToPage(id) {  
-  
-    stopAllVideos();  
-  
-    document.querySelectorAll('.page').forEach(p => {  
-        p.classList.remove('active');  
-    });  
-  
-    const activePage = document.getElementById(id);  
-    activePage.classList.add('active');  
-  
-    if (id === "videos") startFeelVideos();  
-    if (id === "story") startStoryVideo();  
-    if (id === "final") startFinalVideo();  
-}     
-// SCENE SETUP  
-const scene = new THREE.Scene();  
-const camera = new THREE.PerspectiveCamera(  
-    75,  
-    window.innerWidth / window.innerHeight,  
-    0.1,  
-    1000  
-);  
-  
-const renderer = new THREE.WebGLRenderer({ alpha: true });  
-renderer.setSize(window.innerWidth, window.innerHeight);  
-document.getElementById("introScreen").appendChild(renderer.domElement);  
-  
-camera.position.z = 500;  
-  
-// PARTICLE HEART  
-const totalParticles = 7000;  
-const geometry = new THREE.BufferGeometry();  
-const positions = new Float32Array(totalParticles * 3);  
-  
-let heartPoints = [];  
-  
-function heartFormula(t) {  
-    const x = 16 * Math.pow(Math.sin(t), 3);  
-    const y =  
-        13 * Math.cos(t) -  
-        5 * Math.cos(2 * t) -  
-        2 * Math.cos(3 * t) -  
-        Math.cos(4 * t);  
-    return new THREE.Vector3(x * 9, y * 9, 0);  
-}  
-  
-    // Sequential heart points for hand-drawn effect  
-for (let i = 0; i < totalParticles; i++) {  
-    const t = (i / totalParticles) * Math.PI * 2;  // sequential t  
-    const point = heartFormula(t);  
-  
-    heartPoints.push({  
-        x: point.x,  
-        y: point.y,  
-        z: 0,  
-        drawn: false   // ✨ hand-drawn flag  
-    });  
-}  
-  
-// Sort bottom to top  
-heartPoints.sort((a, b) => a.y - b.y);  
-  
-const material = new THREE.PointsMaterial({  
-    color: 0xff4da6,  
-    size: 3,  
-    transparent: true,  
-    opacity: 0.9  
-});  
-  
-const heart = new THREE.Points(geometry, material);  
-scene.add(heart);  
-heart.position.y = 0;  
-  
-// Animation (NO ROTATION)  
-let drawIndex = 0;  
-let introFinished = false;  
-  
-function animateHeart() {  
-    requestAnimationFrame(animateHeart);  
-  
-    // sequentially draw particles  
-    for (let i = 0; i < 5; i++) { // adjust speed: jitna bada, utna fast  
-        if (drawIndex < heartPoints.length) {  
-            heartPoints[drawIndex].drawn = true;  
-            drawIndex++;  
-        }  
-    }  
-  
-    // update positions  
-    for (let i = 0; i < heartPoints.length; i++) {  
-        const p = heartPoints[i];  
-  
-        // initialize currentY for smooth movement  
-        if (p.drawn && p.currentY === undefined) p.currentY = -400;  
-  
-        // gradual rise to final y  
-        if (p.drawn && p.currentY < p.y) {  
-            p.currentY += (p.y - p.currentY) * 0.05;   
-        }  
-  
-        positions[i*3] = p.x;  
-        positions[i*3+1] = p.drawn ? p.currentY : -400;  
-        positions[i*3+2] = p.z;  
-    }  
-  
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));  
-  
-    // intro complete  
-    if (drawIndex >= heartPoints.length && !introFinished) {  
-        introFinished = true;  
-  
-        setTimeout(() => {  
-            const intro = document.getElementById("introScreen");  
-            intro.style.transition = "1s";  
-            intro.style.opacity = "0";  
-  
-            setTimeout(() => {  
-                intro.style.display = "none";  
-                goToPage("page1");  
-            }, 1000);  
-        }, 1000);  
-    }  
-  
-    renderer.render(scene, camera);  
-    }  
-      
-animateHeart();  
-  
-// Responsive  
-window.addEventListener("resize", () => {  
-    camera.aspect = window.innerWidth / window.innerHeight;  
-    camera.updateProjectionMatrix();  
-    renderer.setSize(window.innerWidth, window.innerHeight);  
-});  
-      
-</script>  </body>  
-  </html>  
-Sab perfect hai abhi 
+<!-- STORY -->
+<div class="page" id="story">
+    <div class="card">
+        <video id="storyVideo" width="100%" playsinline preload="auto">
+            <source src="story.mp4" type="video/mp4">
+        </video>
+        <h2>Forever to Go! 💞</h2>
+        <p class="small">
+            Jab se aap aaye ho mere life mai uss moment se… <br><br>
+            Sab kuch better ho gaya hai 🌺💫 <br><br>
+            You are my peace, my happiness, and my home 💖 <br><br>
+            Love feels effortless and endless 💕 <br><br>
+            Together always, heart to heart, forever 🫂✨💜
+        </p>
+        <button onclick="goToPage('page3')">Back</button>
+    </div>
+</div>
+
+<!-- VIDEOS PAGE -->
+<div class="page" id="videos">
+    <div class="card">
+        <h1>My Feelings 🎞️</h1>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story1.mp4" type="video/mp4">
+        </video>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story4.mp4" type="video/mp4">
+        </video>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story3.mp4" type="video/mp4">
+        </video>
+        <video class="feelVideo" width="100%" playsinline preload="auto">
+            <source src="story2.mp4" type="video/mp4">
+        </video>
+        <button onclick="goToPage('page3')">Back</button>
+    </div>
+</div>
+
+<!-- PIC IN MY HEART -->
+<div class="page" id="picInMyHeart">
+    <h1>Your Pic 😘</h1>
+    <div class="gallery">
+        <div class="polaroid"><img src="u1.jpg"></div>
+        <div class="polaroid"><img src="u2.jpg"></div>
+        <div class="polaroid"><img src="u3.jpg"></div>
+        <div class="polaroid"><img src="u4.jpg"></div>
+        <div class="polaroid"><img src="u5.jpg"></div>
+        <div class="polaroid"><img src="u6.jpg"></div>
+    </div>
+    <button onclick="goToPage('page3')">Back</button>
+</div>
+
+<!-- FINAL -->
+<div class="page" id="final">
+    <div class="card">
+        <h1>This is for you</h1>
+        <video id="finalVideo" width="100%" playsinline preload="auto">
+            <source src="final.mp4" type="video/mp4">
+        </video>
+        <button class="pink" onclick="goToPage('lastPage')">Next Surprise 🍫</button>
+    </div>
+</div>
+
+<!-- CHOCOLATE PAGE -->
+<div class="page" id="lastPage">
+    <div class="card">
+        <h1>Touch the Chocolate 🍫</h1>
+        <img src="chocolate.jpg" id="choco">
+        <div id="surpriseBox" style="margin-top:20px; display:none;">
+            <img id="surpriseImg" src="" style="width:100%; border-radius:15px;">
+            <p id="surpriseText" class="small"></p>
+        </div>
+        <p id="loveLine" style="
+            margin-top:20px;
+            font-size:18px;
+            opacity:0;
+            transition:1s;
+            color:#ff4d88;
+        ">
+            The chocolate is finished… but my love for you never will be 💖✨
+        </p>
+    </div>
+</div>
+
+<script>
+// Show Page 1 directly
+document.getElementById("page1").classList.add("active");
+
+// NO button grow effect
+let taps = 0;
+function growYes() {
+    taps++;
+    let yes = document.getElementById("yesBtn");
+    yes.style.transform = `scale(${1 + taps * 0.5})`;
+
+    if (taps >= 4) {
+        yes.style.position = "absolute";
+        yes.style.left = "50%";
+        yes.style.top = "60%";
+        yes.style.transform = "translate(-50%, -50%) scale(4)";
+        document.getElementById("noBtn").style.display = "none";
+    }
+}
+
+// 🌸 Flower Falling
+function createFlower() {
+    let page1Active = document.getElementById("page1").classList.contains("active");
+    let page2Active = document.getElementById("page2").classList.contains("active");
+    if (!page1Active && !page2Active) return;
+
+    const flower = document.createElement("div");
+    flower.className = "flower";
+    const flowers = ["🌸","🌺","🌹","🍁","🍂"];
+    flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+
+    let x = Math.random() * window.innerWidth;
+    let y = -50;
+    flower.style.left = x + "px";
+    flower.style.top = y + "px";
+    flower.style.fontSize = (15 + Math.random() * 25) + "px";
+    document.body.appendChild(flower);
+
+    let speed = 1 + Math.random() * 2;
+    let drift = (Math.random() - 0.5) * 1.5;
+    let rotation = 0;
+
+    function fall() {
+        y += speed;
+        x += drift;
+        rotation += 2;
+        flower.style.top = y + "px";
+        flower.style.left = x + "px";
+        flower.style.transform = "rotate(" + rotation + "deg)";
+        if (y < window.innerHeight + 50) requestAnimationFrame(fall);
+        else flower.remove();
+    }
+    fall();
+}
+setInterval(createFlower, 150);
+
+// 🍫 Chocolate Bite
+let clickCount = 0;
+const lines = [
+    "Tum meri sabse meethi aadat ho 🍫❤️",
+    "Har din tumhare saath chocolate se bhi sweet hai 😘",
+    "Tum meri favourite craving ho 😍",
+    "Tum meri life ki Dairy Milk ho 💖",
+    "Forever my sweetest person 💞"
+];
+const images = ["c1.jpg","c2.jpg","c3.jpg","c4.jpg","c5.jpg"];
+
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "choco"){
+        let box = document.getElementById("surpriseBox");
+        let text = document.getElementById("surpriseText");
+        let img = document.getElementById("surpriseImg");
+        let choco = document.getElementById("choco");
+
+        box.style.display = "block";
+        text.innerHTML = lines[clickCount % lines.length];
+        img.src = images[clickCount % images.length];
+
+        let bite = 15 + (clickCount * 12);
+        choco.style.clipPath = `circle(${100 - bite}% at top right)`;
+        choco.style.transform = `rotate(${clickCount * 8}deg) scale(${1 - clickCount * 0.08})`;
+
+        clickCount++;
+        if (clickCount >= 5) {
+            choco.style.opacity = "0.3";
+            choco.style.pointerEvents = "none";
+            document.getElementById("loveLine").style.opacity = "1";
+        }
+    }
+});
+
+// 🛑 Stop all videos
+function stopAllVideos() {
+    document.querySelectorAll("video").forEach(v => { v.pause(); v.currentTime=0; });
+}
+
+// 🎞 My Feelings chain
+const feelVideos = document.querySelectorAll(".feelVideo");
+feelVideos.forEach((video,index)=>{
+    video.addEventListener("ended", function(){
+        if(feelVideos[index+1]){
+            feelVideos[index+1].play().catch(()=>{});
+            setTimeout(()=>{
+                const videosPage = document.getElementById("videos");
+                const nextVideo = feelVideos[index+1];
+                videosPage.scrollTo({
+                    top: nextVideo.getBoundingClientRect().top - videosPage.getBoundingClientRect().top + videosPage.scrollTop - 20,
+                    behavior:"smooth"
+                });
+            },200);
+        }
+    });
+});
+
+function startFeelVideos(){ stopAllVideos(); if(feelVideos.length>0) feelVideos[0].play().catch(()=>{}); }
+function startStoryVideo(){ stopAllVideos(); document.getElementById("storyVideo")?.play().catch(()=>{}); }
+function startFinalVideo(){ stopAllVideos(); document.getElementById("finalVideo")?.play().catch(()=>{}); }
+
+// 🚀 Page Switch
+function goToPage(id){
+    stopAllVideos();
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+
+    if(id==="videos") startFeelVideos();
+    if(id==="story") startStoryVideo();
+    if(id==="final") startFinalVideo();
+}
+</script>
+</body>
+</html>
