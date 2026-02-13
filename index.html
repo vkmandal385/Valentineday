@@ -354,9 +354,18 @@ function createFlower() {
 setInterval(createFlower, 150);
 
 // 🍫 Chocolate Bite
-// 🍫 Smooth Premium Chocolate Bite
+// 🍫 Chocolate Image Change Version
 let clickCount = 0;
 const maxBites = 5;
+
+// 🍫 Chocolate Images (upload 5 images)
+const chocolates = [
+    "choco1.jpg",
+    "choco2.jpg",
+    "choco3.jpg",
+    "choco4.jpg",
+    "choco5.jpg"
+];
 
 const lines = [
     "Tum meri sabse meethi aadat ho 🍫❤️",
@@ -379,32 +388,27 @@ document.addEventListener("click", function(e){
         let img = document.getElementById("surpriseImg");
 
         box.style.display = "block";
+
+        // 🍫 Change chocolate image
+        choco.src = chocolates[clickCount];
+
+        // 💌 Change shayri
         text.innerHTML = lines[clickCount];
+
+        // 📸 Change image below
         img.src = images[clickCount];
-
-        // 🔥 Smooth Upper Right Diagonal Cut
-        let bite = (clickCount + 1) * 18;
-
-        choco.style.clipPath = `polygon(
-            0% 0%,
-            ${100 - bite}% 0%,
-            100% ${bite}%,
-            100% 100%,
-            0% 100%
-        )`;
 
         clickCount++;
 
         if(clickCount === maxBites){
             setTimeout(()=>{
-                choco.style.opacity = "0.3";
+                choco.style.opacity = "0.5";
                 choco.style.pointerEvents = "none";
                 document.getElementById("loveLine").style.opacity = "1";
-            },500);
+            },400);
         }
     }
 });
-
 // 🛑 Stop all videos
 function stopAllVideos() {
     document.querySelectorAll("video").forEach(v => { v.pause(); v.currentTime=0; });
