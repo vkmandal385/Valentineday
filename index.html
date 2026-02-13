@@ -354,7 +354,10 @@ function createFlower() {
 setInterval(createFlower, 150);
 
 // 🍫 Chocolate Bite
+// 🍫 Smooth Premium Chocolate Bite
 let clickCount = 0;
+const maxBites = 5;
+
 const lines = [
     "Tum meri sabse meethi aadat ho 🍫❤️",
     "Har din tumhare saath chocolate se bhi sweet hai 😘",
@@ -362,28 +365,42 @@ const lines = [
     "Tum meri life ki Dairy Milk ho 💖",
     "Forever my sweetest person 💞"
 ];
+
 const images = ["c1.jpg","c2.jpg","c3.jpg","c4.jpg","c5.jpg"];
 
 document.addEventListener("click", function(e){
     if(e.target && e.target.id === "choco"){
+
+        if(clickCount >= maxBites) return;
+
+        let choco = document.getElementById("choco");
         let box = document.getElementById("surpriseBox");
         let text = document.getElementById("surpriseText");
         let img = document.getElementById("surpriseImg");
-        let choco = document.getElementById("choco");
 
         box.style.display = "block";
-        text.innerHTML = lines[clickCount % lines.length];
-        img.src = images[clickCount % images.length];
+        text.innerHTML = lines[clickCount];
+        img.src = images[clickCount];
 
-        let bite = 15 + (clickCount * 12);
-        choco.style.clipPath = `circle(${100 - bite}% at top right)`;
-        choco.style.transform = `rotate(${clickCount * 8}deg) scale(${1 - clickCount * 0.08})`;
+        // 🔥 Smooth Upper Right Diagonal Cut
+        let bite = (clickCount + 1) * 18;
+
+        choco.style.clipPath = `polygon(
+            0% 0%,
+            ${100 - bite}% 0%,
+            100% ${bite}%,
+            100% 100%,
+            0% 100%
+        )`;
 
         clickCount++;
-        if (clickCount >= 5) {
-            choco.style.opacity = "0.3";
-            choco.style.pointerEvents = "none";
-            document.getElementById("loveLine").style.opacity = "1";
+
+        if(clickCount === maxBites){
+            setTimeout(()=>{
+                choco.style.opacity = "0.3";
+                choco.style.pointerEvents = "none";
+                document.getElementById("loveLine").style.opacity = "1";
+            },500);
         }
     }
 });
